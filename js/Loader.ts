@@ -16,7 +16,7 @@ export class Loader extends Phaser.Scene{
             }
             })
             
-            for (let i = 0; i < 400; i++) {
+            for (let i = 0; i < 200; i++) {
                 this.load.spritesheet('hero'+ i, './assets/sprites/hero.png',{
                     frameWidth:54,
                     frameHeight:54,

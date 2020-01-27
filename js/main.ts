@@ -8,8 +8,8 @@ import{Loader} from './Loader'
 
 
 let game = new Phaser.Game({
-    width:window.innerWidth - 20,
-    height:window.innerHeight - 20,
+    width:window.innerWidth,
+    height:window.innerHeight,
     scene:[
         BootScene,MenuScene,PlayScene,Loader
     ],

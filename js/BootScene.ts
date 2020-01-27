@@ -9,6 +9,7 @@ export class BootScene extends Phaser.Scene{
       init(){
 
       }
+      
       preload(){
          this.load.image("Menu", "./assets/image/Menu.jpg") 
          this.load.image("playB", "./assets/image/playB.png")

@@ -57,8 +57,7 @@ export class PlayScene  extends Phaser.Scene{
         let midlayer = map.createStaticLayer('decorations',[tile],0,0);
         let toplayer = map.createStaticLayer('wall',[tile],0,0);
 
-        //@ts-ignore
-        let items = map.createFromObjects("object layer", 164, {key: }).map((sprite: Phaser.GameObjects.Sprite)=>{
+        let items = map.createFromObjects("object layer", 164, {key: './assets/image/dungeon_sheet.png'}).map((sprite: Phaser.GameObjects.Sprite)=>{
             sprite.setScale(1);
             
         });

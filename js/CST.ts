@@ -13,7 +13,7 @@ export const CST = {
         start:'playB.png'
     }
      ,
-  Sprite:{
+  /* Sprite:{
         adventurer:'hero.png'
-    } 
+    } */ 
 }

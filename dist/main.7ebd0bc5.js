@@ -136,9 +136,6 @@ exports.CST = {
   Image: {
     Menu: 'Menu.jpg',
     start: 'playB.png'
-  },
-  Sprite: {
-    adventurer: 'hero.png'
   }
 };
 },{}],"js/BootScene.ts":[function(require,module,exports) {
@@ -372,11 +369,11 @@ function (_Phaser$Scene) {
       var botlayer = map.createStaticLayer('floor', [tile], 0, 0).setDepth(-1);
       var midlayer = map.createStaticLayer('decorations', [tile], 0, 0);
       var toplayer = map.createStaticLayer('wall', [tile], 0, 0);
-      /*  let items = map.createFromObjects("object layer", 164, {key: }).map((sprite: Phaser.GameObjects.Sprite)=>{
-           sprite.setScale(1);
-           
-       }); */
-
+      var items = map.createFromObjects("object layer", 164, {
+        key: './assets/image/dungeon_sheet.png'
+      }).map(function (sprite) {
+        sprite.setScale(1);
+      });
       this.player = this.physics.add.sprite(425, 760, 'hero', 26).setScale(0.29); //@ts-ignore
 
       window.player = this.player; //camera
@@ -385,8 +382,8 @@ function (_Phaser$Scene) {
       this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels); //@ts-ignore
 
       this.keyboard = this.input.keyboard.addKeys("LEFT,RIGHT,UP,DOWN"); //Map collisions
-      // this.physics.add.collider(this.player, toplayer)
 
+      this.physics.add.collider(this.player, toplayer);
       toplayer.setCollisionByProperty({
         collides: true
       });
@@ -483,7 +480,7 @@ function (_Phaser$Scene) {
         }
       });
 
-      for (var i = 0; i < 400; i++) {
+      for (var i = 0; i < 200; i++) {
         this.load.spritesheet('hero' + i, './assets/sprites/hero.png', {
           frameWidth: 54,
           frameHeight: 54
@@ -556,8 +553,8 @@ var Loader_1 = require("./Loader"); //import { Scale } from 'phaser';
 
 
 var game = new Phaser.Game({
-  width: window.innerWidth - 20,
-  height: window.innerHeight - 20,
+  width: window.innerWidth,
+  height: window.innerHeight,
   scene: [BootScene_1.BootScene, MenuScene_1.MenuScene, PlayScene_1.PlayScene, Loader_1.Loader],
   render: {
     pixelArt: true
