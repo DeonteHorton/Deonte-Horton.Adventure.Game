@@ -10,6 +10,7 @@ import{Loader} from './Loader'
 let game = new Phaser.Game({
     width:window.innerWidth,
     height:window.innerHeight,
+    backgroundColor: 0x252538 ,
     scene:[
         BootScene,MenuScene,PlayScene,Loader
     ],
@@ -19,7 +20,7 @@ let game = new Phaser.Game({
     physics: {
         default: "arcade",
         arcade: {
-            debug: true
+            debug: false
         }
     },
     scale:{

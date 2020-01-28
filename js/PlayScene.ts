@@ -10,42 +10,38 @@ export class PlayScene  extends Phaser.Scene{
 
     }
     preload(){
-        this.textures.addSpriteSheetFromAtlas("hero",{frameWidth:54,frameHeight:54, atlas:"knight", frame:"knight"})
+        this.textures.addSpriteSheetFromAtlas("hero",{frameWidth:50,frameHeight:50, atlas:"knight", frame:"knight"})
         this.load.image('floor', './assets/image/dungeon_sheet.png')
-        
-
+        // to load objects- must make a key
+        this.load.spritesheet('items', './assets/image/dungeon_sheet.png',{frameWidth:16, frameHeight:16} )
         this.load.tilemapTiledJSON('map','./assets/map/mappy.json')
 
 
         console.log(this.textures.list);
+        // this.anims.create({
+        //     key:"left",
+        //     frameRate:10,
+        //     frames:this.anims.generateFrameNumbers("hero",{
+        //         start:2,
+        //         end:3,
+        //     })
+        // })
+        // this.anims.create({
+        //     key:"right",
+        //     frameRate:10,
+        //     frames:this.anims.generateFrameNumbers("hero",{
+        //         start:4,
+        //         end:5
+        //     })
+        // })
         this.anims.create({
-            key:"right",
-            frameRate:10,
+            key:"netural",
+            frameRate:5,
             frames:this.anims.generateFrameNumbers("hero",{
-                frames:[0,1,4]
+                start:0,
+                end:1
             })
-        })
-       /*  this.anims.create({
-            key:"left",
-            frameRate:10,
-            frames:this.anims.generateFrameNumbers("hero",{
-                frames:[0,1,2,3,4,5,6,7,8,9,]
-            })
-        })
-        this.anims.create({
-            key:"down",
-            frameRate:10,
-            frames:this.anims.generateFrameNumbers("hero",{
-                frames:[0,1,2,3,4,5,6,7,8,9,]
-            })
-        })
-        this.anims.create({
-            key:"up",
-            frameRate:10,
-            frames:this.anims.generateFrameNumbers("hero",{
-                frames:[0,1,2,3,4,5,6,7,8,9,]
-            })
-        }) */
+        })       
         
     }
     create(){        
@@ -57,17 +53,15 @@ export class PlayScene  extends Phaser.Scene{
         let midlayer = map.createStaticLayer('decorations',[tile],0,0);
         let toplayer = map.createStaticLayer('wall',[tile],0,0);
 
-        let items = map.createFromObjects("object layer", 164, {key: './assets/image/dungeon_sheet.png'}).map((sprite: Phaser.GameObjects.Sprite)=>{
-            sprite.setScale(1);
-            
-        });
+        let items = map.createFromObjects("object layer", 164, {key:'floor'}).map
+        
         
                 
           this.player = this.physics.add.sprite(425,760,'hero',26).setScale(0.29);
           //@ts-ignore
          window.player = this.player;
           //camera
-         this.cameras.main.startFollow(this.player).setZoom(3.4)
+         this.cameras.main.startFollow(this.player).setZoom(3)
          this.physics.world.setBounds(0,0, map.widthInPixels, map.heightInPixels);
 
         
@@ -88,29 +82,35 @@ export class PlayScene  extends Phaser.Scene{
       
             if (this.keyboard.RIGHT.isDown === true) {
                 this.player.setVelocityX(110);
-
+               // this.player.play('right',true)
+                this.player.play('netural',true)
             }
 
             if (this.keyboard.UP.isDown === true) {
                 this.player.setVelocityY(-110);
+                this.player.play('netural',true)
+                
             }
 
             if (this.keyboard.DOWN.isDown === true) {
                 this.player.setVelocityY(110);
+                this.player.play('netural',true)
             }
 
             if (this.keyboard.LEFT.isDown === true) {
                 this.player.setVelocityX(-110);
+                //this.player.play('left',true)
+                this.player.play('netural',true)
             }
             if (this.keyboard.LEFT.isUp && this.keyboard.RIGHT.isUp) { //not moving on X axis
                 this.player.setVelocityX(0);
+                this.player.play('netural',true)
             }
             if (this.keyboard.UP.isUp && this.keyboard.DOWN.isUp) { //not pressing y movement
                 this.player.setVelocityY(0);
+                this.player.play('netural',true)
             }
             
-
-        
 
     }
 }
