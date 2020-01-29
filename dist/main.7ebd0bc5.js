@@ -265,7 +265,7 @@ function (_Phaser$Scene) {
         playB.setScale(1);
       });
       playB.on('pointerdown', function () {
-        _this.scene.start(CST_1.CST.Scence.Loader); //this.sound.pauseOnBlur = false;
+        _this.scene.start(CST_1.CST.Scence.Loader); // this.sound.pauseOnBlur = false;
         // this.sound.play('theme',{
         //     loop:true,
         //     volume:0.45
@@ -328,30 +328,31 @@ function (_Phaser$Scene) {
         atlas: "knight",
         frame: "knight"
       });
-      this.load.image('floor', './assets/image/dungeon_sheet.png'); // to load objects- must make a key
+      this.load.image('tiles', './assets/image/dungeon_sheet.png');
+      this.load.image('sword', './assets/image/sword.png'); // to load objects- must make a key
 
       this.load.spritesheet('items', './assets/image/dungeon_sheet.png', {
-        frameWidth: 16,
-        frameHeight: 16
+        frameWidth: 64,
+        frameHeight: 64
       });
       this.load.tilemapTiledJSON('map', './assets/map/mappy.json');
-      console.log(this.textures.list); // this.anims.create({
-      //     key:"left",
-      //     frameRate:10,
-      //     frames:this.anims.generateFrameNumbers("hero",{
-      //         start:2,
-      //         end:3,
-      //     })
-      // })
-      // this.anims.create({
-      //     key:"right",
-      //     frameRate:10,
-      //     frames:this.anims.generateFrameNumbers("hero",{
-      //         start:4,
-      //         end:5
-      //     })
-      // })
-
+      console.log(this.textures.list);
+      this.anims.create({
+        key: "left",
+        frameRate: 5,
+        frames: this.anims.generateFrameNumbers("hero", {
+          start: 2,
+          end: 3
+        })
+      });
+      this.anims.create({
+        key: "right",
+        frameRate: 5,
+        frames: this.anims.generateFrameNumbers("hero", {
+          start: 4,
+          end: 5
+        })
+      });
       this.anims.create({
         key: "netural",
         frameRate: 5,
@@ -364,27 +365,43 @@ function (_Phaser$Scene) {
   }, {
     key: "create",
     value: function create() {
+      var _this = this;
+
+      this.input.on("pointermove", function (pointer) {
+        if (pointer.isDown) {
+          var attack = _this.add.image(pointer.worldX, pointer.worldY, "sword").setScale(0.20);
+
+          _this.input.on("pointerup", function () {
+            attack.destroy();
+          });
+        }
+      });
       var map = this.add.tilemap('map');
-      var tile = map.addTilesetImage('dungeon_sheet', 'floor');
-      var botlayer = map.createStaticLayer('floor', [tile], 0, 0).setDepth(-1);
+      var tile = map.addTilesetImage('dungeon_sheet', 'tiles');
+      var botlayer = map.createStaticLayer('floor', [tile], 0, 0).setDepth(0);
       var midlayer = map.createStaticLayer('decorations', [tile], 0, 0);
       var toplayer = map.createStaticLayer('wall', [tile], 0, 0);
       var items = map.createFromObjects("object layer", 164, {
-        key: 'floor'
+        key: 'items'
       }).map;
-      this.player = this.physics.add.sprite(425, 760, 'hero', 26).setScale(0.29); //@ts-ignore
+      this.player = this.physics.add.sprite(410, 740, 'hero', 26).setScale(0.30); //@ts-ignore
 
       window.player = this.player; //camera
 
-      this.cameras.main.startFollow(this.player).setZoom(3);
+      this.cameras.main.startFollow(this.player).setZoom(5);
       this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels); //@ts-ignore
 
       this.keyboard = this.input.keyboard.addKeys("LEFT,RIGHT,UP,DOWN"); //Map collisions
 
       this.physics.add.collider(this.player, toplayer);
+      this.physics.add.collider(this.player, midlayer);
+      midlayer.setCollisionByProperty({
+        collides: true
+      });
       toplayer.setCollisionByProperty({
         collides: true
       });
+      midlayer.setCollision([23, 24, 47, 48, 71, 72, 131, 132, 155, 159, 184, 185, 186, 187]);
       toplayer.setCollision([0, 169, 217, 218, 219, 220, 1610612956, 1610612954, 1610612905, 2684354729, 2147483868, 2147483867, 2147483866, 2147483865, 3758096604, 3221225690, 3221225689, 3758096603, 3221225692, 3221225691, 536871132, 536871130]);
     } // movement
     //adding possible animations
@@ -393,37 +410,45 @@ function (_Phaser$Scene) {
     key: "update",
     value: function update(time, delta) {
       if (this.keyboard.RIGHT.isDown === true) {
-        this.player.setVelocityX(110); // this.player.play('right',true)
-
-        this.player.play('netural', true);
+        this.player.setVelocityX(110); //this.player.play('right',true)
+        //this.player.play('netural',true)
       }
 
       if (this.keyboard.UP.isDown === true) {
-        this.player.setVelocityY(-110);
-        this.player.play('netural', true);
+        this.player.setVelocityY(-110); //this.player.play('netural',true)
       }
 
       if (this.keyboard.DOWN.isDown === true) {
-        this.player.setVelocityY(110);
-        this.player.play('netural', true);
+        this.player.setVelocityY(110); //this.player.play('netural',true)
       }
 
       if (this.keyboard.LEFT.isDown === true) {
         this.player.setVelocityX(-110); //this.player.play('left',true)
-
-        this.player.play('netural', true);
+        //this.player.play('netural',true)
       }
 
       if (this.keyboard.LEFT.isUp && this.keyboard.RIGHT.isUp) {
         //not moving on X axis
-        this.player.setVelocityX(0);
-        this.player.play('netural', true);
+        this.player.setVelocityX(0); //this.player.play('netural',true)
       }
 
       if (this.keyboard.UP.isUp && this.keyboard.DOWN.isUp) {
         //not pressing y movement
-        this.player.setVelocityY(0);
-        this.player.play('netural', true);
+        this.player.setVelocityY(0); //this.player.play('netural',true)
+      }
+
+      if (this.player.body.velocity.x > 0) {
+        //moving right
+        this.player.play("right", true);
+      } else if (this.player.body.velocity.x < 0) {
+        //moving left
+        this.player.play("left", true);
+      } else if (this.player.body.velocity.y < 0) {
+        //moving up
+        this.player.play("netural", true);
+      } else if (this.player.body.velocity.y > 0) {
+        //moving down
+        this.player.play("netural", true);
       }
     }
   }]);
@@ -605,7 +630,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49992" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61485" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
