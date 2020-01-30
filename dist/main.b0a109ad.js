@@ -329,12 +329,9 @@ function (_Phaser$Scene) {
         frame: "knight"
       });
       this.load.image('tiles', './assets/image/dungeon_sheet.png');
-      this.load.image('sword', './assets/image/sword.png'); // to load objects- must make a key
-
-      this.load.spritesheet('items', './assets/image/dungeon_sheet.png', {
-        frameWidth: 64,
-        frameHeight: 64
-      });
+      this.load.image('sword', './assets/image/sword.png');
+      this.load.image('coin-xp', './assets/image/coins/real-coin.png');
+      this.load.image('coin-damage', './assets/image/coins/fake-coin.png');
       this.load.tilemapTiledJSON('map', './assets/map/mappy.json');
       console.log(this.textures.list);
       this.anims.create({
@@ -377,14 +374,18 @@ function (_Phaser$Scene) {
       var map = this.add.tilemap('map');
       var tile = map.addTilesetImage('dungeon_sheet', 'tiles'); // tile layers
 
-      var botlayer = map.createStaticLayer('floor', [tile], 0, 0).setDepth(0);
-      var midlayer = map.createStaticLayer('decorations', [tile], 0, 0);
-      var door = map.createStaticLayer('door', [tile], 0, 0);
-      var toplayer = map.createStaticLayer('wall', [tile], 0, 0);
-      var items = map.createFromObjects("object layer", 166, {
-        key: 'tiles'
-      }).map;
-      this.player = this.physics.add.sprite(410, 740, 'hero', 26).setScale(0.30); //@ts-ignore
+      var floor = map.createStaticLayer('floor', [tile], 0, 0).setDepth(0);
+      var rocks = map.createStaticLayer('decorations', [tile], 0, 0).setDepth(2); //let items = map.createStaticLayer('items',[tile],0,0);
+
+      var door = map.createStaticLayer('doors', [tile], 0, 0).setDepth(3);
+      var wall = map.createStaticLayer('wall', [tile], 0, 0);
+      var xp = map.createFromObjects('xp-coins', 164, {
+        key: 'coin-xp'
+      });
+      var trap = map.createFromObjects('damage-coins', 168, {
+        key: 'coin-damage'
+      });
+      this.player = this.physics.add.sprite(415, 740, 'hero', 26).setScale(0.30); //@ts-ignore
 
       window.player = this.player; //camera
 
@@ -393,17 +394,25 @@ function (_Phaser$Scene) {
 
       this.keyboard = this.input.keyboard.addKeys("W, A, S, D, SPACEBAR"); //Map collisions
 
-      this.physics.add.collider(this.player, midlayer);
-      this.physics.add.collider(this.player, toplayer);
+      this.physics.add.collider(this.player, rocks);
+      this.physics.add.collider(this.player, wall);
       this.physics.add.collider(this.player, door);
       door.setCollisionByProperty({
         collides: true
+      }); // collision for mid layer
+
+      rocks.setCollisionByProperty({
+        collides: true
+      }); // collision for top layer
+
+      wall.setCollisionByProperty({
+        collides: true
       });
-      door.setCollision(173); // indexes for mid layer
+      door.setTileLocationCallback(26, 9, 1.5, 1, function () {
+        alert("Must defeat mini bosses and collect keys to unlock this door"); //@ts-ignore
 
-      midlayer.setCollision([23, 24, 47, 48, 71, 72, 131, 132, 155, 159, 184, 185, 186, 187]); // indexes for top layer
-
-      toplayer.setCollision([0, 169, 217, 218, 219, 220, 1610612956, 1610612954, 1610612905, 2684354729, 2147483868, 2147483867, 2147483866, 2147483865, 3758096604, 3221225690, 3221225689, 3758096603, 3221225692, 3221225691, 536871132, 536871130]);
+        door.setTileLocationCallback(26, 9, 1.5, 1, null);
+      });
     } // movement
     //adding possible animations
 

@@ -16,9 +16,9 @@ export class PlayScene  extends Phaser.Scene{
         this.textures.addSpriteSheetFromAtlas("hero",{frameWidth:50,frameHeight:50, atlas:"knight", frame:"knight"})
         this.load.image('tiles', './assets/image/dungeon_sheet.png')
         this.load.image('sword', './assets/image/sword.png')
-        
-        // to load objects- must make a key
-        this.load.spritesheet('items', './assets/image/dungeon_sheet.png',{frameWidth:64, frameHeight:64} )
+        this.load.image('coin-xp', './assets/image/coins/real-coin.png')
+        this.load.image('coin-damage', './assets/image/coins/fake-coin.png')
+
         this.load.tilemapTiledJSON('map','./assets/map/mappy.json')
         
         
@@ -66,18 +66,17 @@ export class PlayScene  extends Phaser.Scene{
         
         let tile = map.addTilesetImage('dungeon_sheet','tiles')
 
-
         // tile layers
-        let botlayer = map.createStaticLayer('floor',[tile],0,0).setDepth(0)
-        let midlayer = map.createStaticLayer('decorations',[tile],0,0);
-        let door = map.createStaticLayer('door',[tile],0,0)
-        let toplayer = map.createStaticLayer('wall',[tile],0,0);
-
-        let items = map.createFromObjects("object layer", 166, {key:'tiles'}).map
+        let floor = map.createStaticLayer('floor',[tile],0,0).setDepth(0)
+        let rocks = map.createStaticLayer('decorations',[tile],0,0).setDepth(2);
+        //let items = map.createStaticLayer('items',[tile],0,0);
+        let door = map.createStaticLayer('doors',[tile],0,0).setDepth(3)
+        let wall = map.createStaticLayer('wall',[tile],0,0); 
         
-        
+        let xp = map.createFromObjects('xp-coins',164,{key:'coin-xp'})
+        let trap = map.createFromObjects('damage-coins',168,{key:'coin-damage'})
                 
-          this.player = this.physics.add.sprite(410,740,'hero',26).setScale(0.30);
+          this.player = this.physics.add.sprite(415,740,'hero',26).setScale(0.30);
           //@ts-ignore
          window.player = this.player;
           //camera
@@ -89,15 +88,23 @@ export class PlayScene  extends Phaser.Scene{
          this.keyboard = this.input.keyboard.addKeys("W, A, S, D, SPACEBAR")
 
          //Map collisions
-         this.physics.add.collider(this.player, midlayer)
-         this.physics.add.collider(this.player, toplayer)
+         this.physics.add.collider(this.player, rocks)
+         this.physics.add.collider(this.player, wall)
          this.physics.add.collider(this.player, door)
+
          door.setCollisionByProperty({collides:true})
-         door.setCollision(173)
-        // indexes for mid layer
-         midlayer.setCollision([23,24,47,48,71,72,131,132,155,159,184,185,186,187])
-        // indexes for top layer
-         toplayer.setCollision([0,169,217,218,219,220,1610612956,1610612954,1610612905,2684354729,2147483868,2147483867,2147483866,2147483865,3758096604, 3221225690, 3221225689,3758096603,3221225692,3221225691,536871132,536871130])
+        // collision for mid layer
+
+        rocks.setCollisionByProperty({collides:true})
+        // collision for top layer
+        wall.setCollisionByProperty({collides:true})
+
+         door.setTileLocationCallback(26,9,1.5,1, ()=>{
+            alert("Must defeat mini bosses and collect keys to unlock this door")
+
+           //@ts-ignore
+           door.setTileLocationCallback(26,9,1.5,1, null)
+         })
 
 
     }
