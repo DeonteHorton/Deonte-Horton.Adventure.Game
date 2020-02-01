@@ -1,8 +1,12 @@
 import { CST } from "./CST";
+import { CharacterSprite } from "./charactersprite";
 import { Physics } from "phaser";
 export class PlayScene  extends Phaser.Scene{
     player!: Phaser.Physics.Arcade.Sprite;
     keyboard!: { [index: string]: Phaser.Input.Keyboard.Key };
+    //xp!: Phaser.GameObjects.GameObject[];
+    //  trap!: Phaser.Physics.Arcade.Sprite;
+    //  coinsTemp!:  Phaser.Physics.Arcade.Group;
     constructor(){
         
         super({
@@ -60,23 +64,59 @@ export class PlayScene  extends Phaser.Scene{
                     })
                  
             })
+            var map;
 
-        
-        let map = this.add.tilemap('map')
-        
+
+        //Adding map and tileset image for map
+         map = this.add.tilemap('map')
         let tile = map.addTilesetImage('dungeon_sheet','tiles')
+
 
         // tile layers
         let floor = map.createStaticLayer('floor',[tile],0,0).setDepth(0)
         let rocks = map.createStaticLayer('decorations',[tile],0,0).setDepth(2);
-        //let items = map.createStaticLayer('items',[tile],0,0);
         let door = map.createStaticLayer('doors',[tile],0,0).setDepth(3)
         let wall = map.createStaticLayer('wall',[tile],0,0); 
+
+        // interactive objects
+        //@ts-ignore
+        var coinsTemp = this.physics.add.group()
+            
+
+
+        let xp = map.getObjectLayer('xp-coins')['objects'];
+
+    
+        xp.forEach((element,idx)=>{
+            let coin = coinsTemp.create(element.x,element.y,'coin-xp')
+            coin.setScale(0.03)
+            coin.setOrigin(0,1)
+
+        })
         
-        let xp = map.createFromObjects('xp-coins',164,{key:'coin-xp'})
-        let trap = map.createFromObjects('damage-coins',168,{key:'coin-damage'})
+    
+
+        // xp.forEach((element,idxr) => {
+        //     //@ts-ignore
+        //    let coin = coinsTemp.create(element.x, element.y, 'coin-xp');
+        //    coin.setScale(0.005)
+        //    this.input.enableDebug(coin)
+          
+        // });
+        
+        //@ts-ignore
+        //this.trap = map.createFromObjects('damage-coins',168,{key:'coin-damage'})
+        
+        // this.physics.add.existing(this.xp)
+        // this.physics.add.existing(this.trap)
+
+        
+        // this.input.on("gameobjectdown", (pointer: Phaser.Input.Pointer, obj: Phaser.GameObjects.Sprite)=> {
+        //     obj.destroy(); 
+        // });
+
                 
-          this.player = this.physics.add.sprite(415,740,'hero',26).setScale(0.30);
+        this.player = new CharacterSprite(this,415,740,'hero',26).setScale(0.30);
           //@ts-ignore
          window.player = this.player;
           //camera
@@ -84,13 +124,23 @@ export class PlayScene  extends Phaser.Scene{
          this.physics.world.setBounds(0,0, map.widthInPixels, map.heightInPixels);
 
         
+         
          //@ts-ignore
-         this.keyboard = this.input.keyboard.addKeys("W, A, S, D, SPACEBAR")
-
-         //Map collisions
+         this.keyboard = this.input.keyboard.addKeys("W, A, S, D, SPACE")
+         //tile collisions
          this.physics.add.collider(this.player, rocks)
          this.physics.add.collider(this.player, wall)
          this.physics.add.collider(this.player, door)
+         //@ts-ignore
+         this.physics.add.overlap(coinsTemp, this.player,()=>{
+             //@ts-ignore
+            console.log('COLLECTING');
+            
+         })
+         function collectCoin() {
+             coinsTemp.destroy()
+         }
+
 
          door.setCollisionByProperty({collides:true})
         // collision for mid layer
@@ -105,6 +155,14 @@ export class PlayScene  extends Phaser.Scene{
            //@ts-ignore
            door.setTileLocationCallback(26,9,1.5,1, null)
          })
+         
+         // draws the color over collision tiles
+         wall.renderDebug(this.add.graphics(),{
+            tileColor: null, //non-colliding tiles
+            collidingTileColor: new Phaser.Display.Color(243, 134, 48, 200), // Colliding tiles,
+            faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Colliding face edges
+        })
+
 
 
     }
@@ -156,5 +214,6 @@ export class PlayScene  extends Phaser.Scene{
                 this.player.play("netural", true);
             }
 
+            
     }
 }

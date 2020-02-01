@@ -384,6 +384,11 @@
                          "name":"xp",
                          "type":"float",
                          "value":15
+                        },
+                        {
+                            "name":"collides",
+                            "type":"bool",
+                            "value":true
                         }],
                  "type":"XP-egg"
                 }, 
@@ -394,6 +399,11 @@
                          "name":"Health-regen",
                          "type":"float",
                          "value":20
+                        },
+                        {
+                            "name":"collides",
+                            "type":"bool",
+                            "value":true
                         }],
                  "type":"Health-regen"
                 }, 
@@ -404,6 +414,11 @@
                          "name":"damage",
                          "type":"float",
                          "value":30
+                        },
+                        {
+                            "name":"collides",
+                            "type":"bool",
+                            "value":true
                         }],
                  "type":"bad-egg"
                 }, 
@@ -438,7 +453,7 @@
                          "name":"game-over",
                          "type":"bool",
                          "value":true
-                        }],
+                        }],   
                  "type":"chest"
                 }, 
                 {

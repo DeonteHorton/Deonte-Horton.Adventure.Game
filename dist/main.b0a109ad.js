@@ -279,7 +279,56 @@ function (_Phaser$Scene) {
 }(Phaser.Scene);
 
 exports.MenuScene = MenuScene;
-},{"./CST":"src/CST.ts"}],"src/PlayScene.ts":[function(require,module,exports) {
+},{"./CST":"src/CST.ts"}],"src/charactersprite.ts":[function(require,module,exports) {
+"use strict";
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var CharacterSprite =
+/*#__PURE__*/
+function (_Phaser$Physics$Arcad) {
+  _inherits(CharacterSprite, _Phaser$Physics$Arcad);
+
+  function CharacterSprite(scene, x, y, texture, frame) {
+    var _this;
+
+    _classCallCheck(this, CharacterSprite);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(CharacterSprite).call(this, scene, x, y, texture, frame));
+    scene.sys.updateList.add(_assertThisInitialized(_this));
+    scene.sys.displayList.add(_assertThisInitialized(_this));
+    scene.physics.world.enableBody(_assertThisInitialized(_this));
+
+    _this.setImmovable(true);
+
+    _this.hp = 150;
+    _this.attack = 25;
+    _this.level = 1;
+    _this.keys = 0;
+    return _this;
+  }
+
+  return CharacterSprite;
+}(Phaser.Physics.Arcade.Sprite);
+
+exports.CharacterSprite = CharacterSprite;
+},{}],"src/PlayScene.ts":[function(require,module,exports) {
 "use strict";
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -306,11 +355,16 @@ Object.defineProperty(exports, "__esModule", {
 
 var CST_1 = require("./CST");
 
+var charactersprite_1 = require("./charactersprite");
+
 var PlayScene =
 /*#__PURE__*/
 function (_Phaser$Scene) {
   _inherits(PlayScene, _Phaser$Scene);
 
+  //xp!: Phaser.GameObjects.GameObject[];
+  //  trap!: Phaser.Physics.Arcade.Sprite;
+  //  coinsTemp!:  Phaser.Physics.Arcade.Group;
   function PlayScene() {
     _classCallCheck(this, PlayScene);
 
@@ -371,32 +425,59 @@ function (_Phaser$Scene) {
           attack.destroy();
         });
       });
-      var map = this.add.tilemap('map');
+      var map; //Adding map and tileset image for map
+
+      map = this.add.tilemap('map');
       var tile = map.addTilesetImage('dungeon_sheet', 'tiles'); // tile layers
 
       var floor = map.createStaticLayer('floor', [tile], 0, 0).setDepth(0);
-      var rocks = map.createStaticLayer('decorations', [tile], 0, 0).setDepth(2); //let items = map.createStaticLayer('items',[tile],0,0);
-
+      var rocks = map.createStaticLayer('decorations', [tile], 0, 0).setDepth(2);
       var door = map.createStaticLayer('doors', [tile], 0, 0).setDepth(3);
-      var wall = map.createStaticLayer('wall', [tile], 0, 0);
-      var xp = map.createFromObjects('xp-coins', 164, {
-        key: 'coin-xp'
-      });
-      var trap = map.createFromObjects('damage-coins', 168, {
-        key: 'coin-damage'
-      });
-      this.player = this.physics.add.sprite(415, 740, 'hero', 26).setScale(0.30); //@ts-ignore
+      var wall = map.createStaticLayer('wall', [tile], 0, 0); // interactive objects
+      //@ts-ignore
+
+      var coinsTemp = this.physics.add.group();
+      var xp = map.getObjectLayer('xp-coins')['objects'];
+      xp.forEach(function (element, idx) {
+        var coin = coinsTemp.create(element.x, element.y, 'coin-xp');
+        coin.setScale(0.03);
+        coin.setOrigin(0, 1);
+      }); // xp.forEach((element,idxr) => {
+      //     //@ts-ignore
+      //    let coin = coinsTemp.create(element.x, element.y, 'coin-xp');
+      //    coin.setScale(0.005)
+      //    this.input.enableDebug(coin)
+      // });
+      //@ts-ignore
+      //this.trap = map.createFromObjects('damage-coins',168,{key:'coin-damage'})
+      // this.physics.add.existing(this.xp)
+      // this.physics.add.existing(this.trap)
+      // this.input.on("gameobjectdown", (pointer: Phaser.Input.Pointer, obj: Phaser.GameObjects.Sprite)=> {
+      //     obj.destroy(); 
+      // });
+
+      this.player = new charactersprite_1.CharacterSprite(this, 415, 740, 'hero', 26).setScale(0.30); //@ts-ignore
 
       window.player = this.player; //camera
 
       this.cameras.main.startFollow(this.player).setZoom(6.5);
       this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels); //@ts-ignore
 
-      this.keyboard = this.input.keyboard.addKeys("W, A, S, D, SPACEBAR"); //Map collisions
+      this.keyboard = this.input.keyboard.addKeys("W, A, S, D, SPACE"); //tile collisions
 
       this.physics.add.collider(this.player, rocks);
       this.physics.add.collider(this.player, wall);
-      this.physics.add.collider(this.player, door);
+      this.physics.add.collider(this.player, door); //@ts-ignore
+
+      this.physics.add.overlap(coinsTemp, this.player, function () {
+        //@ts-ignore
+        console.log('COLLECTING');
+      });
+
+      function collectCoin() {
+        coinsTemp.destroy();
+      }
+
       door.setCollisionByProperty({
         collides: true
       }); // collision for mid layer
@@ -412,6 +493,13 @@ function (_Phaser$Scene) {
         alert("Must defeat mini bosses and collect keys to unlock this door"); //@ts-ignore
 
         door.setTileLocationCallback(26, 9, 1.5, 1, null);
+      }); // draws the color over collision tiles
+
+      wall.renderDebug(this.add.graphics(), {
+        tileColor: null,
+        collidingTileColor: new Phaser.Display.Color(243, 134, 48, 200),
+        faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Colliding face edges
+
       });
     } // movement
     //adding possible animations
@@ -467,7 +555,7 @@ function (_Phaser$Scene) {
 }(Phaser.Scene);
 
 exports.PlayScene = PlayScene;
-},{"./CST":"src/CST.ts"}],"src/Loader.ts":[function(require,module,exports) {
+},{"./CST":"src/CST.ts","./charactersprite":"src/charactersprite.ts"}],"src/Loader.ts":[function(require,module,exports) {
 "use strict";
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -604,7 +692,7 @@ var game = new Phaser.Game({
   physics: {
     default: "arcade",
     arcade: {
-      debug: false
+      debug: true
     }
   },
   scale: {
@@ -640,7 +728,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61485" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "65374" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
