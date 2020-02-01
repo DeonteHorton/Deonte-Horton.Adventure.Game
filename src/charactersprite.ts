@@ -1,6 +1,8 @@
 export class CharacterSprite extends Phaser.Physics.Arcade.Sprite {
     hp: number;
+    maxHp:number;
     attack:number;
+    xp:number;
     level:number;
     keys:number;
 
@@ -11,8 +13,10 @@ export class CharacterSprite extends Phaser.Physics.Arcade.Sprite {
         scene.sys.displayList.add(this);
         scene.physics.world.enableBody(this);
         this.setImmovable(true);
-        this.hp = 150;
+        this.hp = 3;
+        this.maxHp = 5;
         this.attack = 25;
+        this.xp = 0;
         this.level = 1;
         this.keys = 0;
     }

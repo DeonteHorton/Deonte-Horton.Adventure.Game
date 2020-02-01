@@ -4,9 +4,6 @@ import { Physics } from "phaser";
 export class PlayScene  extends Phaser.Scene{
     player!: Phaser.Physics.Arcade.Sprite;
     keyboard!: { [index: string]: Phaser.Input.Keyboard.Key };
-    //xp!: Phaser.GameObjects.GameObject[];
-    //  trap!: Phaser.Physics.Arcade.Sprite;
-    //  coinsTemp!:  Phaser.Physics.Arcade.Group;
     constructor(){
         
         super({
@@ -54,16 +51,6 @@ export class PlayScene  extends Phaser.Scene{
             
         }
         create(){
-
-            this.input.on("pointerdown",(pointer:Phaser.Input.Pointer)=>{
-
-                    var attack = this.add.image(pointer.worldX,pointer.worldY,"sword").setScale(0.20)
-
-                    this.input.on("pointerup",()=>{
-                        attack.destroy()
-                    })
-                 
-            })
             var map;
 
 
@@ -79,51 +66,37 @@ export class PlayScene  extends Phaser.Scene{
         let wall = map.createStaticLayer('wall',[tile],0,0); 
 
         // interactive objects
-        //@ts-ignore
-        var coinsTemp = this.physics.add.group()
+
+        var coins_buff = this.physics.add.group()
             
-
-
-        let xp = map.getObjectLayer('xp-coins')['objects'];
-
-    
-        xp.forEach((element,idx)=>{
-            let coin = coinsTemp.create(element.x,element.y,'coin-xp')
-            coin.setScale(0.03)
-            coin.setOrigin(0,1)
-
+        let good_coins = map.getObjectLayer('xp-coins')['objects'];
+        good_coins.forEach((element)=>{
+            let coin = coins_buff.create(element.x,element.y,'coin-xp')
+            coin.setScale(0.03);
+            coin.setOrigin(0,1);
+  
         })
         
-    
-
-        // xp.forEach((element,idxr) => {
-        //     //@ts-ignore
-        //    let coin = coinsTemp.create(element.x, element.y, 'coin-xp');
-        //    coin.setScale(0.005)
-        //    this.input.enableDebug(coin)
-          
-        // });
+        var coins_debuff = this.physics.add.group()
+            
+        let bad_coins = map.getObjectLayer('damage-coins')['objects'];
+        bad_coins.forEach((element)=>{
+            let coin = coins_debuff.create(element.x,element.y,'coin-damage')
+            coin.setScale(0.03);
+            coin.setOrigin(0,1);
+  
+        })
         
-        //@ts-ignore
-        //this.trap = map.createFromObjects('damage-coins',168,{key:'coin-damage'})
         
-        // this.physics.add.existing(this.xp)
-        // this.physics.add.existing(this.trap)
-
         
-        // this.input.on("gameobjectdown", (pointer: Phaser.Input.Pointer, obj: Phaser.GameObjects.Sprite)=> {
-        //     obj.destroy(); 
-        // });
-
-                
         this.player = new CharacterSprite(this,415,740,'hero',26).setScale(0.30);
           //@ts-ignore
-         window.player = this.player;
-          //camera
+        // window.player = this.player;
+        //camera
          this.cameras.main.startFollow(this.player).setZoom(6.5)
          this.physics.world.setBounds(0,0, map.widthInPixels, map.heightInPixels);
-
-        
+         
+         
          
          //@ts-ignore
          this.keyboard = this.input.keyboard.addKeys("W, A, S, D, SPACE")
@@ -131,41 +104,52 @@ export class PlayScene  extends Phaser.Scene{
          this.physics.add.collider(this.player, rocks)
          this.physics.add.collider(this.player, wall)
          this.physics.add.collider(this.player, door)
-         //@ts-ignore
-         this.physics.add.overlap(coinsTemp, this.player,()=>{
-             //@ts-ignore
-            console.log('COLLECTING');
-            
-         })
-         function collectCoin() {
-             coinsTemp.destroy()
-         }
-
-
+         this.physics.add.overlap(this.player,coins_buff ,collect_buff)
+         this.physics.add.overlap(this.player,coins_debuff ,collect_debuff)
+        
+         // able to move objects/items to player
+         //this.physics.accelerateTo(coins_debuff,this.player.x,this.player.y)
+         
          door.setCollisionByProperty({collides:true})
-        // collision for mid layer
-
-        rocks.setCollisionByProperty({collides:true})
+         // collision for mid layer
+         
+         rocks.setCollisionByProperty({collides:true})
         // collision for top layer
         wall.setCollisionByProperty({collides:true})
-
+        
          door.setTileLocationCallback(26,9,1.5,1, ()=>{
-            alert("Must defeat mini bosses and collect keys to unlock this door")
+             alert("Must defeat mini bosses and collect keys to unlock this door")
 
            //@ts-ignore
            door.setTileLocationCallback(26,9,1.5,1, null)
          })
-         
-         // draws the color over collision tiles
-         wall.renderDebug(this.add.graphics(),{
-            tileColor: null, //non-colliding tiles
-            collidingTileColor: new Phaser.Display.Color(243, 134, 48, 200), // Colliding tiles,
-            faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Colliding face edges
-        })
 
+         //@ts-ignore
+        function collect_buff(player,coin) {
+            coin.destroy(true)
+            player.hp++;
+            player.xp++;
+            
+            console.log('health:',player.hp,'xp:',player.xp,'level:',player.level);
+            alert("You've gained 1 health and 2 xp")
 
+            //console.log('coin:',coin,'player:',player);
+            
+        }
+        //@ts-ignore
+        function collect_debuff(player,coin) {
+            player.hp--;
+            console.log('health:',player.hp);
+            coin.destroy(true)
+            alert("You lost 1 health")
+            //console.log('coin:',coin,'player:',player);
+            
+        }
+
+        
 
     }
+    
     // movement
     //adding possible animations
     update(time: number, delta: number) { //delta 16.666 @ 60fps

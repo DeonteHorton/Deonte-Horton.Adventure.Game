@@ -317,8 +317,10 @@ function (_Phaser$Physics$Arcad) {
 
     _this.setImmovable(true);
 
-    _this.hp = 150;
+    _this.hp = 3;
+    _this.maxHp = 5;
     _this.attack = 25;
+    _this.xp = 0;
     _this.level = 1;
     _this.keys = 0;
     return _this;
@@ -362,9 +364,6 @@ var PlayScene =
 function (_Phaser$Scene) {
   _inherits(PlayScene, _Phaser$Scene);
 
-  //xp!: Phaser.GameObjects.GameObject[];
-  //  trap!: Phaser.Physics.Arcade.Sprite;
-  //  coinsTemp!:  Phaser.Physics.Arcade.Group;
   function PlayScene() {
     _classCallCheck(this, PlayScene);
 
@@ -416,15 +415,6 @@ function (_Phaser$Scene) {
   }, {
     key: "create",
     value: function create() {
-      var _this = this;
-
-      this.input.on("pointerdown", function (pointer) {
-        var attack = _this.add.image(pointer.worldX, pointer.worldY, "sword").setScale(0.20);
-
-        _this.input.on("pointerup", function () {
-          attack.destroy();
-        });
-      });
       var map; //Adding map and tileset image for map
 
       map = this.add.tilemap('map');
@@ -434,31 +424,24 @@ function (_Phaser$Scene) {
       var rocks = map.createStaticLayer('decorations', [tile], 0, 0).setDepth(2);
       var door = map.createStaticLayer('doors', [tile], 0, 0).setDepth(3);
       var wall = map.createStaticLayer('wall', [tile], 0, 0); // interactive objects
-      //@ts-ignore
 
-      var coinsTemp = this.physics.add.group();
-      var xp = map.getObjectLayer('xp-coins')['objects'];
-      xp.forEach(function (element, idx) {
-        var coin = coinsTemp.create(element.x, element.y, 'coin-xp');
+      var coins_buff = this.physics.add.group();
+      var good_coins = map.getObjectLayer('xp-coins')['objects'];
+      good_coins.forEach(function (element) {
+        var coin = coins_buff.create(element.x, element.y, 'coin-xp');
         coin.setScale(0.03);
         coin.setOrigin(0, 1);
-      }); // xp.forEach((element,idxr) => {
-      //     //@ts-ignore
-      //    let coin = coinsTemp.create(element.x, element.y, 'coin-xp');
-      //    coin.setScale(0.005)
-      //    this.input.enableDebug(coin)
-      // });
-      //@ts-ignore
-      //this.trap = map.createFromObjects('damage-coins',168,{key:'coin-damage'})
-      // this.physics.add.existing(this.xp)
-      // this.physics.add.existing(this.trap)
-      // this.input.on("gameobjectdown", (pointer: Phaser.Input.Pointer, obj: Phaser.GameObjects.Sprite)=> {
-      //     obj.destroy(); 
-      // });
-
+      });
+      var coins_debuff = this.physics.add.group();
+      var bad_coins = map.getObjectLayer('damage-coins')['objects'];
+      bad_coins.forEach(function (element) {
+        var coin = coins_debuff.create(element.x, element.y, 'coin-damage');
+        coin.setScale(0.03);
+        coin.setOrigin(0, 1);
+      });
       this.player = new charactersprite_1.CharacterSprite(this, 415, 740, 'hero', 26).setScale(0.30); //@ts-ignore
-
-      window.player = this.player; //camera
+      // window.player = this.player;
+      //camera
 
       this.cameras.main.startFollow(this.player).setZoom(6.5);
       this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels); //@ts-ignore
@@ -467,16 +450,10 @@ function (_Phaser$Scene) {
 
       this.physics.add.collider(this.player, rocks);
       this.physics.add.collider(this.player, wall);
-      this.physics.add.collider(this.player, door); //@ts-ignore
-
-      this.physics.add.overlap(coinsTemp, this.player, function () {
-        //@ts-ignore
-        console.log('COLLECTING');
-      });
-
-      function collectCoin() {
-        coinsTemp.destroy();
-      }
+      this.physics.add.collider(this.player, door);
+      this.physics.add.overlap(this.player, coins_buff, collect_buff);
+      this.physics.add.overlap(this.player, coins_debuff, collect_debuff); // able to move objects/items to player
+      //this.physics.accelerateTo(coins_debuff,this.player.x,this.player.y)
 
       door.setCollisionByProperty({
         collides: true
@@ -493,14 +470,23 @@ function (_Phaser$Scene) {
         alert("Must defeat mini bosses and collect keys to unlock this door"); //@ts-ignore
 
         door.setTileLocationCallback(26, 9, 1.5, 1, null);
-      }); // draws the color over collision tiles
+      }); //@ts-ignore
 
-      wall.renderDebug(this.add.graphics(), {
-        tileColor: null,
-        collidingTileColor: new Phaser.Display.Color(243, 134, 48, 200),
-        faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Colliding face edges
+      function collect_buff(player, coin) {
+        coin.destroy(true);
+        player.hp++;
+        player.xp++;
+        console.log('health:', player.hp, 'xp:', player.xp, 'level:', player.level);
+        alert("You've gained 1 health and 2 xp"); //console.log('coin:',coin,'player:',player);
+      } //@ts-ignore
 
-      });
+
+      function collect_debuff(player, coin) {
+        player.hp--;
+        console.log('health:', player.hp);
+        coin.destroy(true);
+        alert("You lost 1 health"); //console.log('coin:',coin,'player:',player);
+      }
     } // movement
     //adding possible animations
 
@@ -728,7 +714,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "65374" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50162" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
