@@ -3,7 +3,8 @@ export const CST = {
         Boot:'Boot',
         Menu:'Menu',
         Play:'play',
-        Loader:'Loader'
+        Loader:'Loader',
+        Gameover:'gameover'
     },
     Audio:{
         Track:'final_bell.mp3'

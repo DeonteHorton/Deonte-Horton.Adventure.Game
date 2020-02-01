@@ -1,6 +1,6 @@
 import { CST } from "./CST";
 import { CharacterSprite } from "./charactersprite";
-import { Physics } from "phaser";
+import { Physics, Scenes } from "phaser";
 export class PlayScene  extends Phaser.Scene{
     player!: Phaser.Physics.Arcade.Sprite;
     keyboard!: { [index: string]: Phaser.Input.Keyboard.Key };
@@ -105,7 +105,7 @@ export class PlayScene  extends Phaser.Scene{
          this.physics.add.collider(this.player, wall)
          this.physics.add.collider(this.player, door)
          this.physics.add.overlap(this.player,coins_buff ,collect_buff)
-         this.physics.add.overlap(this.player,coins_debuff ,collect_debuff)
+         this.physics.add.overlap(this.player,coins_debuff ,collect_debuff,)
         
          // able to move objects/items to player
          //this.physics.accelerateTo(coins_debuff,this.player.x,this.player.y)
@@ -129,6 +129,15 @@ export class PlayScene  extends Phaser.Scene{
             coin.destroy(true)
             player.hp++;
             player.xp++;
+            if (player.xp === player.xpCap) {
+                player.level++;
+                player.xpCap++;
+                player.maxHp+= 4;
+                player.xp =0;
+            }
+            if (player.hp >= player.maxHp) {
+                player.hp = player.maxHp
+            }
             
             console.log('health:',player.hp,'xp:',player.xp,'level:',player.level);
             alert("You've gained 1 health and 2 xp")
@@ -136,19 +145,25 @@ export class PlayScene  extends Phaser.Scene{
             //console.log('coin:',coin,'player:',player);
             
         }
-        //@ts-ignore
-        function collect_debuff(player,coin) {
+          //@ts-ignore
+          function collect_debuff(player,coin) {
             player.hp--;
             console.log('health:',player.hp);
             coin.destroy(true)
             alert("You lost 1 health")
+            if (player.hp === 0) {
+               alert('Gamover')
+               window.location.reload()
+            }
             //console.log('coin:',coin,'player:',player);
-            
+
         }
+      
 
         
 
     }
+    
     
     // movement
     //adding possible animations

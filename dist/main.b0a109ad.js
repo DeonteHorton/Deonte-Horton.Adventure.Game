@@ -128,7 +128,8 @@ exports.CST = {
     Boot: 'Boot',
     Menu: 'Menu',
     Play: 'play',
-    Loader: 'Loader'
+    Loader: 'Loader',
+    Gameover: 'gameover'
   },
   Audio: {
     Track: 'final_bell.mp3'
@@ -204,7 +205,7 @@ function (_Phaser$Scene) {
 
 exports.BootScene = BootScene;
 },{"./CST":"src/CST.ts"}],"src/MenuScene.ts":[function(require,module,exports) {
-"use strict"; // menu scene
+"use strict";
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -226,7 +227,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 Object.defineProperty(exports, "__esModule", {
   value: true
-});
+}); // menu scene
 
 var CST_1 = require("./CST");
 
@@ -286,6 +287,10 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
 function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
@@ -299,6 +304,8 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var CST_1 = require("./CST");
 
 var CharacterSprite =
 /*#__PURE__*/
@@ -318,6 +325,7 @@ function (_Phaser$Physics$Arcad) {
     _this.setImmovable(true);
 
     _this.hp = 3;
+    _this.xpCap = 5;
     _this.maxHp = 5;
     _this.attack = 25;
     _this.xp = 0;
@@ -326,11 +334,20 @@ function (_Phaser$Physics$Arcad) {
     return _this;
   }
 
+  _createClass(CharacterSprite, [{
+    key: "gameover",
+    value: function gameover() {
+      if (this.hp === 0) {
+        this.scene.scene.start(CST_1.CST.Scence.Gameover);
+      }
+    }
+  }]);
+
   return CharacterSprite;
 }(Phaser.Physics.Arcade.Sprite);
 
 exports.CharacterSprite = CharacterSprite;
-},{}],"src/PlayScene.ts":[function(require,module,exports) {
+},{"./CST":"src/CST.ts"}],"src/PlayScene.ts":[function(require,module,exports) {
 "use strict";
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -476,6 +493,18 @@ function (_Phaser$Scene) {
         coin.destroy(true);
         player.hp++;
         player.xp++;
+
+        if (player.xp === player.xpCap) {
+          player.level++;
+          player.xpCap++;
+          player.maxHp += 4;
+          player.xp = 0;
+        }
+
+        if (player.hp >= player.maxHp) {
+          player.hp = player.maxHp;
+        }
+
         console.log('health:', player.hp, 'xp:', player.xp, 'level:', player.level);
         alert("You've gained 1 health and 2 xp"); //console.log('coin:',coin,'player:',player);
       } //@ts-ignore
@@ -485,7 +514,13 @@ function (_Phaser$Scene) {
         player.hp--;
         console.log('health:', player.hp);
         coin.destroy(true);
-        alert("You lost 1 health"); //console.log('coin:',coin,'player:',player);
+        alert("You lost 1 health");
+
+        if (player.hp === 0) {
+          alert('Gamover');
+          window.location.reload();
+        } //console.log('coin:',coin,'player:',player);
+
       }
     } // movement
     //adding possible animations
@@ -650,6 +685,91 @@ function (_Phaser$Scene) {
 }(Phaser.Scene);
 
 exports.Loader = Loader;
+},{"./CST":"src/CST.ts"}],"src/gameover.ts":[function(require,module,exports) {
+"use strict";
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var CST_1 = require("./CST");
+
+var Gameover =
+/*#__PURE__*/
+function (_Phaser$Scene) {
+  _inherits(Gameover, _Phaser$Scene);
+
+  function Gameover() {
+    _classCallCheck(this, Gameover);
+
+    return _possibleConstructorReturn(this, _getPrototypeOf(Gameover).call(this, {
+      key: CST_1.CST.Scence.Gameover
+    }));
+  }
+
+  _createClass(Gameover, [{
+    key: "preload",
+    value: function preload() {
+      var _this = this;
+
+      var loadingBar = this.add.graphics();
+
+      for (var i = 0; i < 150; i++) {
+        this.load.spritesheet('hero' + i, './assets/sprites/hero.png', {
+          frameWidth: 54,
+          frameHeight: 54
+        });
+      }
+
+      var width = this.cameras.main.width;
+      var height = this.cameras.main.height; //@ts-ignore
+
+      this.load.on("progress", function () {
+        var loadingText = _this.make.text({
+          x: width / 2,
+          y: height / 2 - 50,
+          text: 'GAME OVER',
+          style: {
+            font: '108px monospace',
+            fill: '#ffffff'
+          }
+        });
+
+        loadingText.setOrigin(0.5, 0.5);
+      });
+      this.load.on('complete', function () {
+        loadingBar.destroy(true);
+      });
+    }
+  }, {
+    key: "create",
+    value: function create() {
+      this.scene.start(CST_1.CST.Scence.Menu);
+    }
+  }]);
+
+  return Gameover;
+}(Phaser.Scene);
+
+exports.Gameover = Gameover;
 },{"./CST":"src/CST.ts"}],"src/main.ts":[function(require,module,exports) {
 "use strict";
 /**@type {import("../type/phaser")} */
@@ -664,14 +784,16 @@ var MenuScene_1 = require("./MenuScene");
 
 var PlayScene_1 = require("./PlayScene");
 
-var Loader_1 = require("./Loader"); //import { Scale } from 'phaser';
+var Loader_1 = require("./Loader");
+
+var gameover_1 = require("./gameover"); //import { Scale } from 'phaser';
 
 
 var game = new Phaser.Game({
   width: window.innerWidth,
   height: window.innerHeight,
   backgroundColor: 0x252538,
-  scene: [BootScene_1.BootScene, MenuScene_1.MenuScene, PlayScene_1.PlayScene, Loader_1.Loader],
+  scene: [BootScene_1.BootScene, MenuScene_1.MenuScene, PlayScene_1.PlayScene, Loader_1.Loader, gameover_1.Gameover],
   render: {
     pixelArt: true
   },
@@ -686,7 +808,7 @@ var game = new Phaser.Game({
     autoCenter: Phaser.Scale.CENTER_BOTH
   }
 });
-},{"./BootScene":"src/BootScene.ts","./MenuScene":"src/MenuScene.ts","./PlayScene":"src/PlayScene.ts","./Loader":"src/Loader.ts"}],"../../../../AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./BootScene":"src/BootScene.ts","./MenuScene":"src/MenuScene.ts","./PlayScene":"src/PlayScene.ts","./Loader":"src/Loader.ts","./gameover":"src/gameover.ts"}],"../../../../AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
