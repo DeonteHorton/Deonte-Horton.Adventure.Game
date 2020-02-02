@@ -1,6 +1,6 @@
 import { CST } from "./CST";
 import { CharacterSprite } from "./charactersprite";
-import { Physics, Scenes } from "phaser";
+import{Gameover} from './gameover'
 export class PlayScene  extends Phaser.Scene{
     player!: Phaser.Physics.Arcade.Sprite;
     keyboard!: { [index: string]: Phaser.Input.Keyboard.Key };
@@ -49,7 +49,9 @@ export class PlayScene  extends Phaser.Scene{
                 })
             })       
             
-        }
+    }
+
+
         create(){
             var map;
 
@@ -64,28 +66,27 @@ export class PlayScene  extends Phaser.Scene{
         let rocks = map.createStaticLayer('decorations',[tile],0,0).setDepth(2);
         let door = map.createStaticLayer('doors',[tile],0,0).setDepth(3)
         let wall = map.createStaticLayer('wall',[tile],0,0); 
+        let chest = map.createStaticLayer('gameover',[tile],0,0)
 
         // interactive objects
 
         var coins_buff = this.physics.add.group()
+        var coins_debuff = this.physics.add.group()
             
         let good_coins = map.getObjectLayer('xp-coins')['objects'];
         good_coins.forEach((element)=>{
             let coin = coins_buff.create(element.x,element.y,'coin-xp')
             coin.setScale(0.03);
             coin.setOrigin(0,1);
-  
         })
-        
-        var coins_debuff = this.physics.add.group()
-            
+
         let bad_coins = map.getObjectLayer('damage-coins')['objects'];
         bad_coins.forEach((element)=>{
             let coin = coins_debuff.create(element.x,element.y,'coin-damage')
             coin.setScale(0.03);
             coin.setOrigin(0,1);
-  
         })
+        
         
         
         
@@ -126,21 +127,24 @@ export class PlayScene  extends Phaser.Scene{
 
          //@ts-ignore
         function collect_buff(player,coin) {
+            let num = 3;
             coin.destroy(true)
             player.hp++;
             player.xp++;
             if (player.xp === player.xpCap) {
+                num++
                 player.level++;
                 player.xpCap++;
-                player.maxHp+= 4;
+                player.maxHp+= num;
                 player.xp =0;
+                alert(`You have reached level:${player.level}`)
             }
             if (player.hp >= player.maxHp) {
                 player.hp = player.maxHp
             }
+ 
             
             console.log('health:',player.hp,'xp:',player.xp,'level:',player.level);
-            alert("You've gained 1 health and 2 xp")
 
             //console.log('coin:',coin,'player:',player);
             
@@ -148,16 +152,25 @@ export class PlayScene  extends Phaser.Scene{
           //@ts-ignore
           function collect_debuff(player,coin) {
             player.hp--;
+            let num = 3;
             console.log('health:',player.hp);
             coin.destroy(true)
-            alert("You lost 1 health")
+            if (player.hp === 1 ||player.hp == 2) {
+                alert(`health is low, You have ${player.hp} health remaining`)
+            }
             if (player.hp === 0) {
                alert('Gamover')
-               window.location.reload()
+                location.reload()
+            }
+            if (player.level++) {
+                num++
+                player-= num;
             }
             //console.log('coin:',coin,'player:',player);
 
         }
+        //@ts-ignore
+
       
 
         
@@ -165,11 +178,9 @@ export class PlayScene  extends Phaser.Scene{
     }
     
     
-    // movement
-    //adding possible animations
+    // Movement for player
     update(time: number, delta: number) { //delta 16.666 @ 60fps
 
-      
             if (this.keyboard.D.isDown) {
                 this.player.setVelocityX(60);
                 //this.player.play('right',true)
@@ -201,8 +212,6 @@ export class PlayScene  extends Phaser.Scene{
                 //this.player.play('netural',true)
             }
 
-            
-            
             if (this.player.body.velocity.x > 0) { //moving right
                 this.player.play("right", true);
             } else if (this.player.body.velocity.x < 0) { //moving left
@@ -211,8 +220,6 @@ export class PlayScene  extends Phaser.Scene{
                 this.player.play("netural", true);
             } else if (this.player.body.velocity.y > 0) { //moving down
                 this.player.play("netural", true);
-            }
-
-            
+            } 
     }
 }
