@@ -4,7 +4,7 @@ export const CST = {
         Menu:'Menu',
         Play:'play',
         Loader:'Loader',
-        Gameover:'gameover'
+        Gameover:'gameover',
     },
     Audio:{
         Track:'final_bell.mp3'

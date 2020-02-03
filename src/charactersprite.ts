@@ -1,5 +1,3 @@
-import { CST } from "./CST";
-
 export class CharacterSprite extends Phaser.Physics.Arcade.Sprite {
     hp: number;
     maxHp:number;
@@ -8,7 +6,6 @@ export class CharacterSprite extends Phaser.Physics.Arcade.Sprite {
     xpCap:number;
     level:number;
     keys:number;
-    keyboard: any;
 
     constructor(scene: Phaser.Scene, x: number, y: number, texture: string, frame?: string | number) {
         super(scene, x, y, texture, frame);
@@ -17,19 +14,12 @@ export class CharacterSprite extends Phaser.Physics.Arcade.Sprite {
         scene.sys.displayList.add(this);
         scene.physics.world.enableBody(this);
         this.setImmovable(true);
-        this.hp = 2;
+        this.hp = 50;
         this.xpCap = 5;
-        this.maxHp = 5;
+        this.maxHp = 100;
         this.attack = 25;
         this.xp = 0;
         this.level = 1;
         this.keys = 0;
-    }
-    gameover(){
-        if (this.hp === 0) {
-            this.scene.scene.start(CST.Scence.Gameover)
-        }
-    }
-
-  
+    }  
 }

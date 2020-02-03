@@ -16,7 +16,24 @@ export class MenuScene extends Phaser.Scene{
         }
 
         create(){
-            let playB = this.add.image(this.game.renderer.width / 2, this.game.renderer.height * 0.20, "playB").setDepth(1)
+
+            var width = this.cameras.main.width;
+            var height = this.cameras.main.height;
+            //@ts-ignore
+
+                var loadingText = this.make.text({
+                    x: width / 2,
+                    y: height * 0.20,
+                    text: 'Dungeon 0',
+                    style: {
+                        font: '64px monospace',
+                        fill: '#ffffff',
+                    }
+                    
+                });
+                loadingText.setOrigin(0.5, 0.5).setDepth(2);
+
+            let playB = this.add.image(this.game.renderer.width / 2, this.game.renderer.height / 2 , "playB").setDepth(1)
             this.add.image(-200,-200,"Menu").setOrigin(0)
 
 

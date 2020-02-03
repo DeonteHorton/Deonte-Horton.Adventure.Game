@@ -6,6 +6,7 @@ export class Gameover extends Phaser.Scene{
         })
     }
     preload(){
+        this.scene.start(CST.Scence.Gameover)
         let loadingBar = this.add.graphics()
             
             for (let i = 0; i < 150; i++) {

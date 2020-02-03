@@ -16,19 +16,19 @@ let game = new Phaser.Game({
         BootScene,MenuScene,PlayScene,Loader,Gameover
     ],
     render:{
-        pixelArt:true
+        pixelArt:true,
     },
     physics: {
         default: "arcade",
         arcade: {
-            debug: true
+            debug: false
         }
     },
     scale:{
         mode:Phaser.Scale.FIT,
         autoCenter:Phaser.Scale.CENTER_BOTH
     }
-        
+
     
 });
 

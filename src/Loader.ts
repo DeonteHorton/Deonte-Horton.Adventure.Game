@@ -16,7 +16,7 @@ export class Loader extends Phaser.Scene{
             }
             })
             
-            for (let i = 0; i < 200; i++) {
+            for (let i = 0; i < 300; i++) {
                 this.load.spritesheet('hero'+ i, './assets/sprites/hero.png',{
                     frameWidth:54,
                     frameHeight:54,
@@ -38,7 +38,17 @@ export class Loader extends Phaser.Scene{
                 });
                 loadingText.setOrigin(0.5, 0.5);
                 loadingBar.fillRect(0, this.game.renderer.height / 2 + 50, this.game.renderer.width * percent ,50)
-               
+
+                var controls = this.make.text({
+                    x: width / 2,
+                    y: height / 2 + 150 ,
+                    text: 'Press A,W,D,S to move and avoid the monsters',
+                    style: {
+                        font: '48px monospace',
+                        fill: '#ffffff'
+                    }
+                })
+                controls.setOrigin(0.5, 0.5);
                 
             })
 
@@ -66,8 +76,10 @@ export class Loader extends Phaser.Scene{
                 percentText.destroy();
                 
                 
-            })
+                
+            })            
     }
+
     create(){
         this.scene.start(CST.Scence.Play)
     }
