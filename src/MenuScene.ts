@@ -48,12 +48,12 @@ export class MenuScene extends Phaser.Scene{
             })
             playB.on('pointerdown', () =>{
                 this.scene.start(CST.Scence.Loader)
-                // this.sound.pauseOnBlur = false;
-                // this.sound.play('theme',{
-                //     loop:true,
-                //     volume:0.45
+                this.sound.pauseOnBlur = false;
+                this.sound.play('theme',{
+                    loop:true,
+                    volume:0.45
                     
-                // })
+                })
             })
         }
 }
