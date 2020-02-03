@@ -1,10 +1,10 @@
 /**@type {import("../type/phaser")} */
 
-import {BootScene} from './BootScene'
-import { MenuScene } from './MenuScene';
-import {PlayScene} from './PlayScene'
-import{Loader} from './Loader'
-import {Gameover} from './gameover'
+import {BootScene} from '../BootScene'
+import { MenuScene } from '../MenuScene';
+import {PlayScene} from '../PlayScene'
+import{Loader} from '../Loader'
+import {Gameover} from '../gameover'
 //import { Scale } from 'phaser';
 
 

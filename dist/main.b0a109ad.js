@@ -559,16 +559,16 @@ function (_Phaser$Scene) {
       });
 
       for (var i = 0; i < 6; i++) {
-        var x = Phaser.Math.FloatBetween(200, 800);
-        var y = Phaser.Math.FloatBetween(200, 800);
+        var x = Phaser.Math.FloatBetween(100, 700);
+        var y = Phaser.Math.FloatBetween(100, 700);
         this.minion = new minion_1.MinionSprite(this, x, y, 'minion', 0).setScale(0.25);
         this.monsters.add(this.minion);
       }
 
       for (var _i = 0; _i < 3; _i++) {
-        var _x = Phaser.Math.FloatBetween(200, 800);
+        var _x = Phaser.Math.FloatBetween(100, 700);
 
-        var _y = Phaser.Math.FloatBetween(200, 800);
+        var _y = Phaser.Math.FloatBetween(100, 700);
 
         this.mini_boss = new mini_boss_1.Mini_bossSprite(this, _x, _y, 'mini-boss', 0).setScale(0.25);
         this.monsters.add(this.mini_boss);

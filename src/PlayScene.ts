@@ -1,8 +1,8 @@
-import { CST } from "./CST";
-import { CharacterSprite } from "./charactersprite";
-import {Mini_bossSprite} from './mini_boss'
-import{MinionSprite} from './minion'
-import{Gameover} from './gameover'
+import { CST } from "../CST";
+import { CharacterSprite } from "../charactersprite";
+import {Mini_bossSprite} from '../mini_boss'
+import{MinionSprite} from '../minion'
+import{Gameover} from '../gameover'
 export class PlayScene  extends Phaser.Scene{
     player!: Phaser.Physics.Arcade.Sprite;
     keyboard!: { [index: string]: Phaser.Input.Keyboard.Key };
@@ -103,15 +103,15 @@ export class PlayScene  extends Phaser.Scene{
 
         
         for (let i = 0; i < 6; i++) {
-            let x = Phaser.Math.FloatBetween(200,800)
-            let y = Phaser.Math.FloatBetween(200,800)
+            let x = Phaser.Math.FloatBetween(100,700)
+            let y = Phaser.Math.FloatBetween(100,700)
             this.minion = new MinionSprite(this,x,y,'minion',0).setScale(0.25) 
             this.monsters.add(this.minion); 
         }
 
         for (let i = 0; i < 3; i++) {
-            let x = Phaser.Math.FloatBetween(200,800)
-            let y = Phaser.Math.FloatBetween(200,800)
+            let x = Phaser.Math.FloatBetween(100,700)
+            let y = Phaser.Math.FloatBetween(100,700)
             this.mini_boss = new Mini_bossSprite(this,x,y,'mini-boss',0).setScale(0.25)
             this.monsters.add(this.mini_boss)
         }
