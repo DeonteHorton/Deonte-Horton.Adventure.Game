@@ -1,4 +1,4 @@
-import {CST} from '../CST'
+import {CST} from './CST'
 export class Gameover extends Phaser.Scene{
     constructor(){
         super({

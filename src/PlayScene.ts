@@ -1,8 +1,8 @@
-import { CST } from "../CST";
-import { CharacterSprite } from "../charactersprite";
-import {Mini_bossSprite} from '../mini_boss'
-import{MinionSprite} from '../minion'
-import{Gameover} from '../gameover'
+import { CST } from "./CST";
+import { CharacterSprite } from "./charactersprite";
+import {Mini_bossSprite} from './mini_boss'
+import{MinionSprite} from './minion'
+import{Gameover} from './gameover'
 export class PlayScene  extends Phaser.Scene{
     player!: Phaser.Physics.Arcade.Sprite;
     keyboard!: { [index: string]: Phaser.Input.Keyboard.Key };
@@ -241,7 +241,7 @@ export class PlayScene  extends Phaser.Scene{
         // An example of how to  make more than one object move
 
         for (let i = 0; i < this.monsters.getChildren().length; i++) {
-            this.physics.accelerateToObject(this.monsters.getChildren()[i], this.player);
+            this.physics.accelerateToObject(this.monsters.getChildren()[i], this.player,40,300,300);
 
         }
 
