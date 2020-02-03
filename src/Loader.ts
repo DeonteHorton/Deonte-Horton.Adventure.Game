@@ -42,7 +42,7 @@ export class Loader extends Phaser.Scene{
                 var controls = this.make.text({
                     x: width / 2,
                     y: height / 2 + 150 ,
-                    text: 'Press A,W,D,S to move and avoid the monsters',
+                    text: 'Press LEFT,RIGHT,UP,DOWN to move and avoid the monsters',
                     style: {
                         font: '48px monospace',
                         fill: '#ffffff'

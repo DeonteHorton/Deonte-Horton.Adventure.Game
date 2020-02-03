@@ -96,7 +96,7 @@ export class PlayScene  extends Phaser.Scene{
 
 
         //@ts-ignore
-        this.keyboard = this.input.keyboard.addKeys("W, A, S, D, SPACE")
+        this.keyboard = this.input.keyboard.addKeys("RIGHT,LEFT,UP,DOWN")
         
         
         this.monsters = this.physics.add.group({ immovable: true });
@@ -241,29 +241,29 @@ export class PlayScene  extends Phaser.Scene{
         // An example of how to  make more than one object move
 
         for (let i = 0; i < this.monsters.getChildren().length; i++) {
-            this.physics.accelerateToObject(this.monsters.getChildren()[i], this.player,40,300,300);
+            this.physics.accelerateToObject(this.monsters.getChildren()[i], this.player,100,100,100);
 
         }
 
-            if (this.keyboard.D.isDown) {
-                this.player.setVelocityX(60);
+            if (this.keyboard.RIGHT.isDown) {
+                this.player.setVelocityX(70);
             }
 
-            if (this.keyboard.W.isDown) {
-                this.player.setVelocityY(-60);
+            if (this.keyboard.UP.isDown) {
+                this.player.setVelocityY(-70);
             }
 
-            if (this.keyboard.S.isDown) {
-                this.player.setVelocityY(60);
+            if (this.keyboard.DOWN.isDown) {
+                this.player.setVelocityY(70);
             }
 
-            if (this.keyboard.A.isDown) {
-                this.player.setVelocityX(-60);
+            if (this.keyboard.LEFT.isDown) {
+                this.player.setVelocityX(-70);
             }
-            if (this.keyboard.A.isUp && this.keyboard.D.isUp) { //not moving on X axis
+            if (this.keyboard.LEFT.isUp && this.keyboard.RIGHT.isUp) { //not moving on X axis
                 this.player.setVelocityX(0);
             }
-            if (this.keyboard.W.isUp && this.keyboard.S.isUp) { //not pressing y movement
+            if (this.keyboard.UP.isUp && this.keyboard.DOWN.isUp) { //not pressing y movement
                 this.player.setVelocityY(0);
             }
             // if (this.keyboard.SPACE.isDown) {
