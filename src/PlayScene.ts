@@ -2,7 +2,6 @@ import { CST } from "./CST";
 import { CharacterSprite } from "./charactersprite";
 import {Mini_bossSprite} from './mini_boss'
 import{MinionSprite} from './minion'
-import{Gameover} from './gameover'
 export class PlayScene  extends Phaser.Scene{
     player!: Phaser.Physics.Arcade.Sprite;
     keyboard!: { [index: string]: Phaser.Input.Keyboard.Key };
@@ -19,6 +18,7 @@ export class PlayScene  extends Phaser.Scene{
     }
     preload(){
 
+        //Preloads images and sprite sheet before the play scene starts
         this.textures.addSpriteSheetFromAtlas("hero",{frameWidth:50,frameHeight:50, atlas:"knight", frame:"knight"})
         this.load.image('tiles', './assets/image/dungeon_sheet.png')
         this.load.image('mini-boss', './assets/sprites/miniboss.png')
@@ -27,9 +27,8 @@ export class PlayScene  extends Phaser.Scene{
         this.load.image('coin-damage', './assets/image/coins/fake-coin.png')
 
         this.load.tilemapTiledJSON('map','./assets/map/mappy.json')
-        
-        
-        console.log(this.textures.list);
+
+        // Animation for each frame
         this.anims.create({
             key:"left",
             frameRate:7,
@@ -55,14 +54,13 @@ export class PlayScene  extends Phaser.Scene{
                 })
             })       
             
-        }
+    }
         
         
         create(){
 
-        var map;
         //Adding map and tileset image for map
-        map = this.add.tilemap('map')
+        var map = this.add.tilemap('map')
         let tile = map.addTilesetImage('dungeon_sheet','tiles');
 
         //Encase a bug occurs, anything thats moveable will collide with world boundary
@@ -75,8 +73,8 @@ export class PlayScene  extends Phaser.Scene{
         let wall = map.createStaticLayer('wall',[tile],0,0); 
         let chest = map.createStaticLayer('gameover',[tile],0,0)
         
-        // interactive objects
         
+        // interactive objects
         var coins_buff = this.physics.add.group()
         var coins_debuff = this.physics.add.group()
         
@@ -96,12 +94,15 @@ export class PlayScene  extends Phaser.Scene{
 
 
         //@ts-ignore
+
+        //Creates keyboard keys
         this.keyboard = this.input.keyboard.addKeys("RIGHT,LEFT,UP,DOWN")
         
-        
+        //creates a body for any Game object
         this.monsters = this.physics.add.group({ immovable: true });
 
         
+        // Created a for loop to spawn multiple enemies and random positions
         for (let i = 0; i < 6; i++) {
             let x = Phaser.Math.FloatBetween(100,700)
             let y = Phaser.Math.FloatBetween(100,700)
@@ -116,17 +117,10 @@ export class PlayScene  extends Phaser.Scene{
             this.monsters.add(this.mini_boss)
         }
 
+        // Creating our player
         this.player = new CharacterSprite(this,440,777,'hero',10).setScale(0.30);
-        
 
-
-        //@ts-ignore
-        window.minion = this.minion;
-        //@ts-ignore
-        window.player = this.player;
-        //@ts-ignore
-        window.mini_boss = this.mini_boss;
-        //camera thats set to player
+        //camera that is set to player and follows the player
         this.cameras.main.startFollow(this.player).setZoom(6.5)
 
 
@@ -151,6 +145,7 @@ export class PlayScene  extends Phaser.Scene{
          this.physics.add.overlap(this.player,coins_buff ,collect_buff)
          this.physics.add.overlap(this.player,coins_debuff ,collect_debuff)
         
+         // enables the collides property if collides is set to true
          chest.setCollisionByProperty({collides:true})
          door.setCollisionByProperty({collides:true})
          rocks.setCollisionByProperty({collides:true})
@@ -169,7 +164,7 @@ export class PlayScene  extends Phaser.Scene{
 
         //@ts-ignore
          door.setTileLocationCallback(26,9,1.5,1, (player)=>{
-             alert(`Theres a chest on the other side, I need three keys, I only have ${player.keys}. I must collect coins to gain level and keys`)
+             alert(`Theres a chest on the other side, I need three keys, I only have ${player.keys}. I must collect coins to gain levels and keys`)
          })
          chest.setTileLocationCallback(26,1,3,3, ()=>{
             alert("The chest in within my reach!!")
@@ -198,6 +193,8 @@ export class PlayScene  extends Phaser.Scene{
             let num = 30;
             player.hp++;
             player.xp++;
+
+            //Leveling system
             if (player.xp === player.xpCap) {
                 num++
                 player.hp+= num;
@@ -208,18 +205,18 @@ export class PlayScene  extends Phaser.Scene{
                 player.xp =0;
                 alert(`You have reached level:${player.level} and you're health cap is now ${player.maxHp}, current health ${player.hp}`)
             }
+
             if (player.hp >= player.maxHp) {
                 player.hp = player.maxHp
             }
-            // must reach level four to reach the chest and end the game
+
+            // when the player acquire three keys.... the door is unlocked
             if (player.keys === 3) {
                 door.setCollisionByProperty({collides:true},false)
                 //@ts-ignore
                 door.setTileLocationCallback(26,9,1.5,1, null)
                 alert(`I have four keys now, I can open the door now!!`)
             } 
-            
-            console.log(`health:${player.hp} xp:${player.xp} level:${player.level}`);
         }
 
 
@@ -238,10 +235,9 @@ export class PlayScene  extends Phaser.Scene{
     // Movement for player
     update(time: number, delta: number) { //delta 16.666 @ 60fps
 
-        // An example of how to  make more than one object move
-
+        // Allows all the monsters to follow where you go
         for (let i = 0; i < this.monsters.getChildren().length; i++) {
-            this.physics.accelerateToObject(this.monsters.getChildren()[i], this.player,100,100,100);
+            this.physics.accelerateToObject(this.monsters.getChildren()[i], this.player,30,100,100);
 
         }
 
@@ -266,14 +262,6 @@ export class PlayScene  extends Phaser.Scene{
             if (this.keyboard.UP.isUp && this.keyboard.DOWN.isUp) { //not pressing y movement
                 this.player.setVelocityY(0);
             }
-            // if (this.keyboard.SPACE.isDown) {
-            //     var attack = this.add.image(this.player.x,this.player.y,'sword').setScale(0.5)
-            //     this.physics.world.enableBody(attack); 
-            //     this.physics.add.existing(attack)
-            //     //@ts-ignore
-            //     attack.body.velocity.y -= 250;
-            // }
-
 
             // Animation for player
             if (this.player.body.velocity.x > 0) { //moving right

@@ -1,26 +1,24 @@
+// Allows the use of type Script language
 /**@type {import("../type/phaser")} */
 
+//Transfer all the data from each scene to this file and runs each scene
 import {BootScene} from './BootScene'
 import { MenuScene } from './MenuScene';
 import {PlayScene} from './PlayScene'
 import{Loader} from './Loader'
-import {Gameover} from './gameover'
 
 let game = new Phaser.Game({
     width:window.innerWidth,
     height:window.innerHeight,
     backgroundColor: 0x252538 ,
     scene:[
-        BootScene,MenuScene,PlayScene,Loader,Gameover
+        BootScene,MenuScene,PlayScene,Loader
     ],
     render:{
         pixelArt:true,
     },
     physics: {
         default: "arcade",
-        arcade: {
-            debug: false
-        }
     },
     scale:{
         mode:Phaser.Scale.FIT,

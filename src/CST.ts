@@ -1,3 +1,4 @@
+//Createing keys for each property
 export const CST = {
     Scence:{
         Boot:'Boot',
