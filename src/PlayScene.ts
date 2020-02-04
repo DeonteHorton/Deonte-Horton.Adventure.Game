@@ -164,7 +164,7 @@ export class PlayScene  extends Phaser.Scene{
 
         //@ts-ignore
          door.setTileLocationCallback(26,9,1.5,1, (player)=>{
-             alert(`Theres a chest on the other side, I need three keys, I only have ${player.keys}. I must collect coins to gain levels and keys`)
+             alert(`Theres a chest on the other side, I need three keys, I have ${player.keys}. I must collect coins to gain levels and keys`)
          })
          chest.setTileLocationCallback(26,1,3,3, ()=>{
             alert("The chest in within my reach!!")
