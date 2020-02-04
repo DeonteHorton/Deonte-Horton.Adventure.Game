@@ -203,7 +203,7 @@ export class PlayScene  extends Phaser.Scene{
                 player.keys++;
                 player.maxHp+= num;
                 player.xp =0;
-                alert(`You have reached level:${player.level} and you now have ${player.hp}`)
+                alert(`You have reached level:${player.level} and you now have ${player.hp} health`)
             }
 
             if (player.hp >= player.maxHp) {
@@ -237,7 +237,7 @@ export class PlayScene  extends Phaser.Scene{
 
         // Allows all the monsters to follow where you go
         for (let i = 0; i < this.monsters.getChildren().length; i++) {
-            this.physics.accelerateToObject(this.monsters.getChildren()[i], this.player,30,100,100);
+            this.physics.accelerateToObject(this.monsters.getChildren()[i], this.player,50,100,100);
 
         }
 
