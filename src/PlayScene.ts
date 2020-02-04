@@ -197,13 +197,13 @@ export class PlayScene  extends Phaser.Scene{
             //Leveling system
             if (player.xp === player.xpCap) {
                 num++
-                player.hp+= num;
+                player.hp = player.maxHp;
                 player.level++;
                 player.xpCap++;
                 player.keys++;
                 player.maxHp+= num;
                 player.xp =0;
-                alert(`You have reached level:${player.level} and you're health cap is now ${player.maxHp}, current health ${player.hp}`)
+                alert(`You have reached level:${player.level} and you now have ${player.hp}`)
             }
 
             if (player.hp >= player.maxHp) {
@@ -215,7 +215,7 @@ export class PlayScene  extends Phaser.Scene{
                 door.setCollisionByProperty({collides:true},false)
                 //@ts-ignore
                 door.setTileLocationCallback(26,9,1.5,1, null)
-                alert(`I have four keys now, I can open the door now!!`)
+                alert(`I have three keys now, I can open the door now!!`)
             } 
         }
 

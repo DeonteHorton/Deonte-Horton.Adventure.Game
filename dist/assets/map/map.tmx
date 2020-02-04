@@ -453,44 +453,6 @@
   <object id="166" gid="168" x="304" y="304" width="16" height="16"/>
   <object id="167" gid="168" x="304" y="784" width="16" height="16"/>
  </objectgroup>
- <objectgroup id="18" name="goblins">
-  <object id="177" gid="190" x="80" y="336" width="16" height="16"/>
-  <object id="178" gid="190" x="96" y="480" width="16" height="16"/>
-  <object id="179" gid="190" x="144" y="640" width="16" height="16"/>
-  <object id="180" gid="190" x="112" y="592" width="16" height="16"/>
-  <object id="181" gid="190" x="160" y="688" width="16" height="16"/>
-  <object id="182" gid="190" x="144" y="736" width="16" height="16"/>
-  <object id="183" gid="190" x="48" y="736" width="16" height="16"/>
-  <object id="184" gid="190" x="592" y="688" width="16" height="16"/>
-  <object id="185" gid="190" x="624" y="720" width="16" height="16"/>
-  <object id="186" gid="190" x="704" y="576" width="16" height="16"/>
-  <object id="187" gid="190" x="688" y="624" width="16" height="16"/>
-  <object id="188" gid="190" x="656" y="432" width="16" height="16"/>
-  <object id="189" gid="190" x="624" y="368" width="16" height="16"/>
-  <object id="190" gid="190" x="640" y="480" width="16" height="16"/>
-  <object id="191" gid="190" x="160" y="384" width="16" height="16"/>
-  <object id="192" gid="190" x="128" y="64" width="16" height="16"/>
-  <object id="193" gid="190" x="64" y="64" width="16" height="16"/>
-  <object id="194" gid="190" x="640" y="48" width="16" height="16"/>
-  <object id="195" gid="190" x="656" y="96" width="16" height="16"/>
-  <object id="196" gid="190" x="160" y="224" width="16" height="16"/>
-  <object id="197" gid="190" x="112" y="208" width="16" height="16"/>
-  <object id="198" gid="190" x="624" y="192" width="16" height="16"/>
-  <object id="199" gid="190" x="688" y="288" width="16" height="16"/>
-  <object id="200" gid="190" x="352" y="272" width="16" height="16"/>
-  <object id="201" gid="190" x="448" y="320" width="16" height="16"/>
-  <object id="202" gid="190" x="416" y="272" width="16" height="16"/>
-  <object id="203" gid="190" x="320" y="544" width="16" height="16"/>
-  <object id="205" gid="190" x="464" y="480" width="16" height="16"/>
- </objectgroup>
- <objectgroup id="19" name="bosses">
-  <object id="206" gid="189" x="608" y="768" width="16" height="16"/>
-  <object id="207" gid="189" x="272" y="752" width="16" height="16"/>
-  <object id="208" gid="189" x="256" y="64" width="16" height="16"/>
-  <object id="209" gid="189" x="592" y="48" width="16" height="16"/>
-  <object id="210" gid="189" x="368" y="96" width="16" height="16"/>
-  <object id="211" gid="189" x="464" y="96" width="16" height="16"/>
- </objectgroup>
  <layer id="20" name="gameover" width="50" height="50">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
