@@ -1,7 +1,7 @@
 // Allows the use of type Script language
 /**@type {import("../type/phaser")} */
 
-//Transfer all the data from each scene to this file and runs each scene
+//Transfer all the data from each scene to this file and stores each scene
 import {BootScene} from './BootScene'
 import { MenuScene } from './MenuScene';
 import {PlayScene} from './PlayScene'

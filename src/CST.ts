@@ -1,4 +1,4 @@
-//Createing keys for each property
+//Creating keys for each property
 export const CST = {
     Scence:{
         Boot:'Boot',
@@ -14,8 +14,4 @@ export const CST = {
         Menu:'Menu.jpg',
         start:'playB.png'
     }
-     ,
-  /* Sprite:{
-        adventurer:'hero.png'
-    } */ 
 }

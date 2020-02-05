@@ -120,9 +120,23 @@ export class PlayScene  extends Phaser.Scene{
         // Creating our player
         this.player = new CharacterSprite(this,440,777,'hero',10).setScale(0.30);
 
+        //@ts-ignore
+        var health = this.add.text(650,320, `Health:${this.player.hp}/${this.player.maxHp}`, { fontSize: '12px', fill: '#fff',background:'#000' }).setScrollFactor(0).setDepth(5);
+        health.setBackgroundColor('rgba(0,0,0,50%)')
+        //@ts-ignore
+        var level = this.add.text(650,330, `Level:${this.player.level}`, { fontSize: '12px', fill: '#fff' }).setScrollFactor(0).setDepth(5);
+        level.setBackgroundColor('rgba(0,0,0,50%)')
+        //@ts-ignore
+        var xp = this.add.text(650,340, `XP:${this.player.xp}/${this.player.xpCap}`, { fontSize: '12px', fill: '#fff' }).setScrollFactor(0).setDepth(5);
+        xp.setBackgroundColor('rgba(0,0,0,50%)')
+        //@ts-ignore
+        var keys = this.add.text(650,350, `Keys:${this.player.keys}`, { fontSize: '12px', fill: '#fff' }).setScrollFactor(0).setDepth(5);
+        keys.setBackgroundColor('rgba(0,0,0,50%)')
+    
+
         //camera that is set to player and follows the player
         this.cameras.main.startFollow(this.player).setZoom(6.5)
-
+        
 
         //collisions properties
         this.physics.world.addCollider(this.mini_boss,rocks)
@@ -133,7 +147,7 @@ export class PlayScene  extends Phaser.Scene{
 
         this.physics.world.addCollider(this.monsters.getChildren(),wall)
         this.physics.world.addCollider(this.monsters.getChildren(),rocks)
-        this.physics.world.addCollider(this.player,this.monsters.getChildren(),damageOnCollide)
+        this.physics.world.addOverlap(this.player,this.monsters.getChildren(),damageOnCollide)
 
         this.physics.add.collider(this.player, door)
 
@@ -180,6 +194,7 @@ export class PlayScene  extends Phaser.Scene{
         function damageOnCollide(player,enemy) {
             player.hp--;
             console.log(`health:${player.hp}`);
+            health.setText(`Health:${player.hp}/${player.maxHp}`)
             if (player.hp === 0 ) {
              alert('You Died')  
              location.reload()
@@ -193,6 +208,10 @@ export class PlayScene  extends Phaser.Scene{
             let num = 30;
             player.hp++;
             player.xp++;
+            health.setText(`Health:${player.hp}/${player.maxHp}`)
+            level.setText(`Level:${player.level}`)
+            xp.setText(`XP:${player.xp}/${player.xpCap}`)
+            keys.setText(`Keys:${player.keys}`)
 
             //Leveling system
             if (player.xp === player.xpCap) {
@@ -203,7 +222,11 @@ export class PlayScene  extends Phaser.Scene{
                 player.keys++;
                 player.maxHp+= num;
                 player.xp =0;
-                alert(`You have reached level:${player.level} and you now have ${player.hp} health`)
+                alert(`You received a key`)
+                health.setText(`Health:${player.hp}/${player.maxHp}`)
+                level.setText(`Level:${player.level}`)
+                xp.setText(`XP:${player.xp}/${player.xpCap}`)
+                keys.setText(`Keys:${player.keys}`)
             }
 
             if (player.hp >= player.maxHp) {
@@ -222,13 +245,15 @@ export class PlayScene  extends Phaser.Scene{
 
         // How the player takes damage from the fake coins
           //@ts-ignore
-          function collect_debuff(this:this,player,coin) {
+          function collect_debuff(player,coin) {
             player.hp--;
-            console.log(`health:${player.hp}`);
             coin.destroy(true)
             if (player.hp <= 2) {
                 alert(`I can't take to many hits, I only have ${player.hp} health remaining`)
             }            
+            health.setText(`Health:${player.hp}/${player.maxHp}`)
+            level.setText(`Level:${player.level}`)
+            keys.setText(`Keys:${player.keys}`)
         }          
     }
     

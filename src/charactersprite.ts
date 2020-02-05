@@ -17,12 +17,13 @@ export class CharacterSprite extends Phaser.Physics.Arcade.Sprite {
         scene.sys.displayList.add(this);
         scene.physics.world.enableBody(this);
         this.setImmovable(true);
-        this.hp = 50;
+        this.hp = 100;
         this.xpCap = 5;
-        this.maxHp = 100;
+        this.maxHp = 200;
         this.attack = 25;
         this.xp = 0;
         this.level = 1;
         this.keys = 0;
+
     }  
 }
