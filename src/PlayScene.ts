@@ -121,16 +121,16 @@ export class PlayScene  extends Phaser.Scene{
         this.player = new CharacterSprite(this,440,777,'hero',10).setScale(0.30);
 
         //@ts-ignore
-        var health = this.add.text(650,320, `Health:${this.player.hp}/${this.player.maxHp}`, { fontSize: '12px', fill: '#fff',background:'#000' }).setScrollFactor(0).setDepth(5);
+        var health = this.add.text(window.innerWidth / 2 - 118,window.innerHeight / 2 - 60, `Health:${this.player.hp}/${this.player.maxHp}`, { fontSize: '12px', fill: '#fff',background:'#000' }).setScrollFactor(0).setDepth(5);
         health.setBackgroundColor('rgba(0,0,0,50%)')
         //@ts-ignore
-        var level = this.add.text(650,330, `Level:${this.player.level}`, { fontSize: '12px', fill: '#fff' }).setScrollFactor(0).setDepth(5);
+        var level = this.add.text(window.innerWidth / 2 - 118,window.innerHeight / 2 - 50, `Level:${this.player.level}`, { fontSize: '12px', fill: '#fff' }).setScrollFactor(0).setDepth(5);
         level.setBackgroundColor('rgba(0,0,0,50%)')
         //@ts-ignore
-        var xp = this.add.text(650,340, `XP:${this.player.xp}/${this.player.xpCap}`, { fontSize: '12px', fill: '#fff' }).setScrollFactor(0).setDepth(5);
+        var xp = this.add.text(window.innerWidth / 2 - 118,window.innerHeight / 2 - 40, `XP:${this.player.xp}/${this.player.xpCap}`, { fontSize: '12px', fill: '#fff' }).setScrollFactor(0).setDepth(5);
         xp.setBackgroundColor('rgba(0,0,0,50%)')
         //@ts-ignore
-        var keys = this.add.text(650,350, `Keys:${this.player.keys}`, { fontSize: '12px', fill: '#fff' }).setScrollFactor(0).setDepth(5);
+        var keys = this.add.text(window.innerWidth / 2 - 118,window.innerHeight / 2 - 30, `Keys:${this.player.keys}`, { fontSize: '12px', fill: '#fff' }).setScrollFactor(0).setDepth(5);
         keys.setBackgroundColor('rgba(0,0,0,50%)')
     
 
