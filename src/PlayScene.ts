@@ -120,22 +120,27 @@ export class PlayScene  extends Phaser.Scene{
         // Creating our player
         this.player = new CharacterSprite(this,440,777,'hero',10).setScale(0.30);
 
+        //Creates the UI scene for the player
         //@ts-ignore
         var health = this.add.text(window.innerWidth / 2 - 118,window.innerHeight / 2 - 60, `Health:${this.player.hp}/${this.player.maxHp}`, { fontSize: '12px', fill: '#fff',background:'#000' }).setScrollFactor(0).setDepth(5);
-        health.setBackgroundColor('rgba(0,0,0,50%)')
+        health.setBackgroundColor('rgba(0,0,0)')
+
         //@ts-ignore
-        var level = this.add.text(window.innerWidth / 2 - 118,window.innerHeight / 2 - 50, `Level:${this.player.level}`, { fontSize: '12px', fill: '#fff' }).setScrollFactor(0).setDepth(5);
-        level.setBackgroundColor('rgba(0,0,0,50%)')
+        var level = this.add.text(window.innerWidth / 2 - 118,window.innerHeight / 2 - 48, `Level:${this.player.level}`, { fontSize: '12px', fill: '#fff' }).setScrollFactor(0).setDepth(5);
+        level.setBackgroundColor('rgba(0,0,0)')
+
         //@ts-ignore
-        var xp = this.add.text(window.innerWidth / 2 - 118,window.innerHeight / 2 - 40, `XP:${this.player.xp}/${this.player.xpCap}`, { fontSize: '12px', fill: '#fff' }).setScrollFactor(0).setDepth(5);
-        xp.setBackgroundColor('rgba(0,0,0,50%)')
+        var xp = this.add.text(window.innerWidth / 2 - 118,window.innerHeight / 2 - 35, `XP:${this.player.xp}/${this.player.xpCap}`, { fontSize: '12px', fill: '#fff' }).setScrollFactor(0).setDepth(5);
+        xp.setBackgroundColor('rgba(0,0,0)')
+        
         //@ts-ignore
-        var keys = this.add.text(window.innerWidth / 2 - 118,window.innerHeight / 2 - 30, `Keys:${this.player.keys}`, { fontSize: '12px', fill: '#fff' }).setScrollFactor(0).setDepth(5);
-        keys.setBackgroundColor('rgba(0,0,0,50%)')
+        var keys = this.add.text(window.innerWidth / 2 - 118,window.innerHeight / 2 - 22, `Keys:${this.player.keys}`, { fontSize: '12px', fill: '#fff' }).setScrollFactor(0).setDepth(5);
+        keys.setBackgroundColor('rgba(0,0,0)')
     
 
         //camera that is set to player and follows the player
         this.cameras.main.startFollow(this.player).setZoom(6.5)
+        //this.cameras.main.setViewport(0,0,window.innerWidth / 2 + 200,window.innerHeight + 300)
         
 
         //collisions properties
